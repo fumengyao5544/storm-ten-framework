@@ -60,7 +60,11 @@ public class KafkaConsumeTopology {
     props.put("key.serializer.class","kafka.serializer.StringEncoder");
     conf.put("kafka.broker.properties", props);
 
-    StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
+    //Local Mode
+    cluster.submitTopology("kafkaTridentTest", conf, topology.build());
+
+    //Submit to Cluster Mode
+    //StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
 
   }
 
