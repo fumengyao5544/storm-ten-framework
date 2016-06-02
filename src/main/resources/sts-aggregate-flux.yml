@@ -62,7 +62,7 @@ components:
         value: ${kafka.forceFromStart}
 
 topologySource:
-  className: com.tm.ds.woncup.host.topology.StsAgrTopology
+  className: com.tm.ds.woncup.host.topology.KafkaConsumeTopology
   properties:
     - name: parser
       ref: parser

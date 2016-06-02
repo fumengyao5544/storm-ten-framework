@@ -1,4 +1,4 @@
-package com.frameworks.storm.state.hbase;
+package com.frameworks.storm.state.hbase.increment;
 
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class StsHBaseValueMapperAgr implements HBaseValueMapper {
+public class HBaseValueMapperLong implements HBaseValueMapper {
   private static final long serialVersionUID = 4302384551156570816L;
 
   @Override

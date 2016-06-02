@@ -1,4 +1,4 @@
-package com.frameworks.storm.state.hbase;
+package com.frameworks.storm.state.hbase.increment;
 
 import org.apache.storm.hbase.common.ColumnList;
 import org.apache.storm.hbase.trident.mapper.TridentHBaseMapper;
@@ -6,14 +6,14 @@ import storm.trident.tuple.TridentTuple;
 
 import static org.apache.storm.hbase.common.Utils.toBytes;
 
-public class StsHBaseMapperAgr implements TridentHBaseMapper {
+public class HBaseMapperIncrement implements TridentHBaseMapper {
   private static final long serialVersionUID = -5774550203021487254L;
   private String rowKeyField;
   private String columnFamilyField;
   private String qualifierField;
   private String valueField;
 
-  public StsHBaseMapperAgr(String rowKeyField, String columnFamilyField, String qualifierField, String valueField) {
+  public HBaseMapperIncrement(String rowKeyField, String columnFamilyField, String qualifierField, String valueField) {
     this.rowKeyField = rowKeyField;
     this.columnFamilyField = columnFamilyField;
     this.qualifierField = qualifierField;
