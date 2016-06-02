@@ -16,12 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class BloomDeserialize extends BaseAggregator<String> {
-  public final String eventIdField;
-  private final String qualifierField;
-  private final String valueField;
-  private final int bfSize = 10;
-  private final double bfProbability = .01;
+public class BasicAggregator extends BaseAggregator<String> {
 
   @Override
   public void prepare(Map conf, TridentOperationContext context) {
