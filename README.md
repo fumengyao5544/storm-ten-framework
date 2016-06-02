@@ -1,5 +1,6 @@
 basic framework for reading and writing from kafka and hbase
 
+##KAFKA##
     To run:
 
     mvn clean compile exec:java -Dexec.mainClass="com.frameworks.storm.topology.StsAgrTopology" -Dexec.args="storm-one-framework-1.0.0-SNAPSHOT-storm.jar"
@@ -9,4 +10,9 @@ basic framework for reading and writing from kafka and hbase
 
     storm jar target/storm-one-framework-1.0.0-SNAPSHOT-storm.jar com.frameworks.storm.topology.StsAgrTopology
     need to change last line of topology code to: StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
+
+##HBASE##
+
+    mvn clean compile exec:java -Dexec.mainClass="com.frameworks.storm.topology.HBaseWriterTopology" -Dexec.args="storm-one-framework-1.0.0-SNAPSHOT-storm.jar"
+
 
