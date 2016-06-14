@@ -7,14 +7,14 @@ import storm.trident.operation.TridentCollector;
 import storm.trident.tuple.TridentTuple;
 
 @Slf4j
-public class HBaseFieldGenerator extends BaseFunction{
+public class KafkaFieldGenerator extends BaseFunction{
 
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
 
         //System.out.println("TEST: "+rowKey);
         //log.info();
-        collector.emit(new Values("key","DATA","qualifier",(long) 123,"value"));
+        collector.emit(new Values("key","value"));
 
     }
 }

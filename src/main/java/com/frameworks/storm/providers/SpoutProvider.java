@@ -16,7 +16,9 @@ import java.util.*;
 @Slf4j
 @Setter
 public class SpoutProvider {
-  public static final Fields FIELDS = new Fields("strFruit");
+  public static final Fields FIELDS = new Fields("str");
+//  public static final Fields FIELDS = new Fields("strFruit");
+
   public IBatchSpout createSpout() {
     return new Spout();
   }

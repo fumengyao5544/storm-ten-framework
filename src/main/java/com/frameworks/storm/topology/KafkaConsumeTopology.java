@@ -1,6 +1,8 @@
 package com.frameworks.storm.topology;
 
 import backtype.storm.LocalCluster;
+import com.frameworks.storm.operation.KafkaFieldGenerator;
+import com.frameworks.storm.providers.SpoutProvider;
 import storm.kafka.BrokerHosts;
 import storm.kafka.trident.*;
 import storm.kafka.trident.mapper.FieldNameBasedTupleToKafkaMapper;
@@ -16,6 +18,7 @@ import storm.kafka.ZkHosts;
 
 import storm.trident.TridentTopology;
 import backtype.storm.tuple.Fields;
+import storm.trident.state.StateFactory;
 
 import java.util.Properties;
 @Slf4j
@@ -41,13 +44,16 @@ public class KafkaConsumeTopology {
 
   private void getTopology()throws Exception{
     TridentTopology topology = new TridentTopology();
-    Stream stream = topology.newStream("spout1", createKafkaSpout())
-            .each(new Fields("str"),new com.frameworks.storm.debug.Debug(),new Fields());
+    SpoutProvider sp = new SpoutProvider();
+    Stream stream = topology.newStream("spout1", sp.createSpout())
+            .each(new Fields("str"),new KafkaFieldGenerator(), new Fields("key","string"))
+            .each(new Fields("key","string"),new com.frameworks.storm.debug.Debug(),new Fields());
 
-    TridentKafkaStateFactory stateFactory = new TridentKafkaStateFactory()
+    StateFactory stateFactory = new TridentKafkaStateFactory()
             .withKafkaTopicSelector(new DefaultTopicSelector("sts.debug.topic"))
-            .withTridentTupleToKafkaMapper(new FieldNameBasedTupleToKafkaMapper("word","string"));
-    stream.partitionPersist(stateFactory, new Fields("str"), new TridentKafkaUpdater(), new Fields());
+            .withTridentTupleToKafkaMapper(new FieldNameBasedTupleToKafkaMapper<String, String>("key", "string"));
+
+    stream.partitionPersist(stateFactory, new Fields("key","string"), new TridentKafkaUpdater(), new Fields("key","string"));
 
     Config conf = new Config();
 

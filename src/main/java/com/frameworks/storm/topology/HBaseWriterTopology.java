@@ -78,7 +78,7 @@ public class HBaseWriterTopology {
     props.put("zookeeper.znode.parent", "/hbase-unsecure");
     conf.put("hbase.config", props);
 
-    cluster.submitTopology("kafkaTridentTest", conf, topology.build());
+    StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
   }
 
   public static void main(String args[]){
