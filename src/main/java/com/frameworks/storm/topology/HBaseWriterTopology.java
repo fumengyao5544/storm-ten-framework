@@ -69,6 +69,8 @@ public class HBaseWriterTopology {
             .each(new Fields("key"),new Debug(),new Fields())
             .partitionPersist(factory, fields,  new HBaseUpdater(), new Fields());;
 
+    Stream stream =  topology.newStream("spout1", new SpoutProvider().createSpout());
+
     Config conf = new Config();
 
     LocalCluster cluster = new LocalCluster();

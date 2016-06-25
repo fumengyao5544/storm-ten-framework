@@ -33,8 +33,6 @@ public class KafkaConsumeTopology {
   /*Helper Functions*/
 
   private OpaqueTridentKafkaSpout createKafkaSpout() {
-
-
     BrokerHosts zk = new ZkHosts("hw0002.dev1.awse1a.datasciences.tmcs");
     TridentKafkaConfig spoutConf = new TridentKafkaConfig(zk, "sts.debug.topic");
     spoutConf.scheme = new SchemeAsMultiScheme(new StringScheme());

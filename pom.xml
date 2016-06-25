@@ -192,21 +192,8 @@
         <repository>
             <id>TMCS Nexus - Public</id>
             <name>TMCS Nexus - Public</name>
-            <url>http://maven.platform.tm.tmcs:8081/nexus/content/groups/public/</url>
+            <url>http://repo1.maven.org/maven2/</url>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>Release Repository</name>
-            <url>http://maven.platform.tm.tmcs:8081/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Snapshot Repository</name>
-            <url>http://maven.platform.tm.tmcs:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
