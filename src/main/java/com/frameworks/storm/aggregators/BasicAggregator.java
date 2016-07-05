@@ -16,7 +16,9 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class BasicAggregator extends BaseAggregator<String> {
+public class BasicAggregator extends BaseAggregator<Integer> {
+
+  Integer fruitCount;
 
   @Override
   public void prepare(Map conf, TridentOperationContext context) {
@@ -28,20 +30,19 @@ public class BasicAggregator extends BaseAggregator<String> {
 
   }
 
-
   @Override
-  public String init(Object o, TridentCollector tridentCollector) {
-    return "string";
+  public Integer init(Object fruitCount, TridentCollector tridentCollector) {
+    return (int) fruitCount;
 
   }
 
   @Override
-  public void complete(String eb, TridentCollector tridentCollector) {
+  public void complete(Integer eb, TridentCollector tridentCollector) {
     tridentCollector.emit(new Values("string"));
   }
 
   @Override
-  public void aggregate(String eb, TridentTuple tridentTuple, TridentCollector tridentCollector) {
+  public void aggregate(Integer eb, TridentTuple tridentTuple, TridentCollector tridentCollector) {
 
   }
 

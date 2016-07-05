@@ -1,4 +1,4 @@
-package com.frameworks.storm.state;
+package com.frameworks.storm.state.kafka;
 
 import storm.kafka.trident.TridentKafkaState;
 import storm.trident.operation.TridentCollector;
