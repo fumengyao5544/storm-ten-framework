@@ -1,6 +1,7 @@
 package com.frameworks.storm.aggregators;
 
 import backtype.storm.tuple.Values;
+import com.frameworks.storm.objects.FruitCount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import storm.trident.operation.BaseAggregator;
@@ -8,6 +9,7 @@ import storm.trident.operation.TridentCollector;
 import storm.trident.operation.TridentOperationContext;
 import storm.trident.tuple.TridentTuple;
 
+import java.util.HashMap;
 import java.util.Map;
 
 //import java.util.HashMap;
@@ -16,9 +18,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class BasicAggregator extends BaseAggregator<Integer> {
-
-  Integer fruitCount;
+public class BasicAggregator extends BaseAggregator<FruitCount> {
 
   @Override
   public void prepare(Map conf, TridentOperationContext context) {
@@ -31,19 +31,21 @@ public class BasicAggregator extends BaseAggregator<Integer> {
   }
 
   @Override
-  public Integer init(Object fruitCount, TridentCollector tridentCollector) {
-    return (int) fruitCount;
+  public FruitCount init(Object fruitCount, TridentCollector tridentCollector) {
+    return new FruitCount();
 
   }
 
   @Override
-  public void complete(Integer eb, TridentCollector tridentCollector) {
-    tridentCollector.emit(new Values("string"));
+  public void aggregate(FruitCount fruitCount, TridentTuple tridentTuple, TridentCollector tridentCollector) {
+
+    if(fruitCount.isFirstTuple()) fruitCount.setFruit(tridentTuple.getStringByField("fruit"));
+    fruitCount.setFirstTuple(false);
   }
 
   @Override
-  public void aggregate(Integer eb, TridentTuple tridentTuple, TridentCollector tridentCollector) {
-
+  public void complete(FruitCount fruitCount, TridentCollector tridentCollector) {
+    tridentCollector.emit(new Values(fruitCount.getFruit()));
   }
 
 }

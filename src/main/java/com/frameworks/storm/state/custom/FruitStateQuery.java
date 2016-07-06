@@ -11,14 +11,14 @@ import java.util.List;
 /**
  * Created by christiangao on 6/14/16.
  */
-public class FruitStateQuery extends BaseQueryFunction<FruitState, String> {
+public class FruitStateQuery extends BaseQueryFunction<FruitState, Integer> {
 
     String msgName;
     public FruitStateQuery(String msgName) {
         this.msgName = msgName;
     }
 
-    public List<String> batchRetrieve(FruitState state, List<TridentTuple> inputs) {
+    public List<Integer> batchRetrieve(FruitState state, List<TridentTuple> inputs) {
         List<String> msgList = new ArrayList<String>();
         for(TridentTuple input: inputs) {
             msgList.add(input.getStringByField(msgName));
@@ -26,7 +26,7 @@ public class FruitStateQuery extends BaseQueryFunction<FruitState, String> {
         return state.batchQuery(msgList);
     }
 
-    public void execute(TridentTuple tuple, String prediction, TridentCollector collector) {
+    public void execute(TridentTuple tuple, Integer prediction, TridentCollector collector) {
         collector.emit(new Values(prediction));
     }
 }

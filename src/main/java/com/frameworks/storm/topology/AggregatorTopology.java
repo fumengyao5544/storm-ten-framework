@@ -4,6 +4,7 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.spout.SchemeAsMultiScheme;
 import backtype.storm.tuple.Fields;
+import com.frameworks.storm.aggregators.BasicAggregator;
 import com.frameworks.storm.debug.Debug;
 import com.frameworks.storm.operation.FruitParser;
 import com.frameworks.storm.operation.KafkaFieldGenerator;
@@ -34,7 +35,11 @@ public class AggregatorTopology {
     SpoutProvider sp = new SpoutProvider();
     Stream stream = topology.newStream("spout1", sp.createSpout())
             .each(new Fields("str"),new FruitParser(),new Fields("id","fruit","color","weight"))
-            .each(new Fields("id","fruit","color","weight"),new Debug(),new Fields());
+            .groupBy(new Fields("fruit"))
+            .aggregate(new Fields("fruit"),new BasicAggregator(),new Fields("fruitcount"))
+            .each(new Fields("fruitcount"),new Debug(),new Fields());
+
+           //.each(new Fields("id","fruit","color","weight"),new Debug(),new Fields());
 
     Config conf = new Config();
 
