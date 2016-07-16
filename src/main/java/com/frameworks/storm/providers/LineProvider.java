@@ -24,7 +24,7 @@ public class LineProvider {
     this.fileName = fileName;
     this.batchSize = batchSize;
   }
-  public static final Fields FIELDS = new Fields("str","ts");
+  public static final Fields FIELDS = new Fields("str","timestamp");
 
   public IBatchSpout createSpout() {
     return new Spout(fileName,batchSize);

@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class HBaseStandardValueMapperWithTs implements HBaseValueMapper {
+public class HBaseStandardValueMapperWithTs implements HBaseValueMapper { /*for emitting to hbase */
   private static final long serialVersionUID = 4302384551156570816L;
 
   @Override
-  public List<Values> toValues(ITuple iTuple, Result result) throws Exception {
+  public List<Values> toValues(ITuple iTuple, Result result) throws Exception { //deserialization
     List<Values> values = new ArrayList<Values>();
 
     for(Cell cell : result.rawCells()) {

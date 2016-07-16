@@ -14,7 +14,7 @@ public class KafkaFieldGenerator extends BaseFunction{
 
         //System.out.println("TEST: "+rowKey);
         //log.info();
-        collector.emit(new Values("key","value"));
+        collector.emit(new Values("key",tuple.getStringByField("str")));
 
     }
 }

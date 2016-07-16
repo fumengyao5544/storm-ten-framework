@@ -16,7 +16,8 @@ public class PermeableHBaseUpdater extends BaseStateUpdater<HBaseState> {
     hBaseState.updateState(tuples, collector);
 
     for (TridentTuple tuple : tuples) {
-          collector.emit(tuple);
+      collector.emit(tuple);
+      log.info(tuple.toString());
     }
   }
 }
