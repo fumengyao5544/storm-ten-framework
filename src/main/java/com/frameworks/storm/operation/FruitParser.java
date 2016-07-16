@@ -33,7 +33,6 @@ public class FruitParser extends BaseFunction
 
       Gson gson = new GsonBuilder().create();
       Fruit fruit = gson.fromJson(tuple.getStringByField("str"), Fruit.class);
-
       collector.emit(new Values(fruit.getFruitId(),fruit.getFruit(),fruit.getColor(),fruit.getWeight()));
 
     }

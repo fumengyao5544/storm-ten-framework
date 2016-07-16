@@ -13,17 +13,17 @@ import java.util.List;
  */
 public class FruitStateQuery extends BaseQueryFunction<FruitState, Integer> {
 
-    String msgName;
-    public FruitStateQuery(String msgName) {
-        this.msgName = msgName;
+    String fruitName;
+    public FruitStateQuery(String fruitName) {
+        this.fruitName = fruitName;
     }
 
     public List<Integer> batchRetrieve(FruitState state, List<TridentTuple> inputs) {
-        List<String> msgList = new ArrayList<String>();
+        List<String> fruitCountList = new ArrayList<String>();
         for(TridentTuple input: inputs) {
-            msgList.add(input.getStringByField(msgName));
+            fruitCountList.add(input.getStringByField(fruitName));
         }
-        return state.batchQuery(msgList);
+        return state.batchQuery(fruitCountList);
     }
 
     public void execute(TridentTuple tuple, Integer prediction, TridentCollector collector) {

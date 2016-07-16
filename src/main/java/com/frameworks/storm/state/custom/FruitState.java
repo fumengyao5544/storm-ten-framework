@@ -20,12 +20,12 @@ public class FruitState implements State {
     public void commit(Long txid) {
     }
 
-    public void addToBasket(String fruit) {
+    public void addFruitsToBasket(String fruit,int fruitNum) {
         int basketcount = fruitbasket.containsKey(fruit) ? fruitbasket.get(fruit) : 0; //This is just a simple if else statement
-        fruitbasket.put(fruit, basketcount + 1);
+        fruitbasket.put(fruit, basketcount + fruitNum);
     }
 
-    public void batchAdd(List<String> Fruits) {
+    public void batchAddToBasket(List<String> Fruits) {
         for(String fruit : Fruits){
             int basketcount = fruitbasket.containsKey(fruit) ? fruitbasket.get(fruit) : 0;
             fruitbasket.put(fruit, basketcount + 1);

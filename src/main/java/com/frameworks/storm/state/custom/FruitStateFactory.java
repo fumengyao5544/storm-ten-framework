@@ -12,9 +12,8 @@ import java.util.Map;
 
 public class FruitStateFactory implements StateFactory {
 
-    String init;
-    public FruitStateFactory(String init){
-        this.init = init;
+    public FruitStateFactory(){
+
     }
 
     public State makeState(Map conf, IMetricsContext metricsContext,int partitionIndex, int numPartitions) {

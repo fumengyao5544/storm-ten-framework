@@ -39,13 +39,17 @@ public class BasicAggregator extends BaseAggregator<FruitCount> {
   @Override
   public void aggregate(FruitCount fruitCount, TridentTuple tridentTuple, TridentCollector tridentCollector) {
 
-    if(fruitCount.isFirstTuple()) fruitCount.setFruit(tridentTuple.getStringByField("fruit"));
+    if(fruitCount.isFirstTuple()) fruitCount.setFruit(tridentTuple.getStringByField("fruit")); // Only set name on frist tuple
     fruitCount.setFirstTuple(false);
+
+    fruitCount.setCount(fruitCount.getCount()+1); //aggregate step: how many apples are in this batch?
   }
 
   @Override
   public void complete(FruitCount fruitCount, TridentCollector tridentCollector) {
-    tridentCollector.emit(new Values(fruitCount.getFruit()));
+    int count = fruitCount.getCount();
+    String fruitType = fruitCount.getFruit();
+    tridentCollector.emit(new Values(fruitType,count)); //return fruit
   }
 
 }

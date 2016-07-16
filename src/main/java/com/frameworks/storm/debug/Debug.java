@@ -30,7 +30,7 @@ public class Debug extends BaseFunction
         //System.out.println("TEST: "+rowKey);
         log.info("TUPLE: " + tuple.toString());
 
-    //collector.emit(tuple);
+    collector.emit(tuple);
 
     }
 }

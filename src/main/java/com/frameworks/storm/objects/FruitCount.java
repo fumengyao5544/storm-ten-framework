@@ -14,7 +14,7 @@ public class FruitCount implements Serializable {
     private String fruit;
 
     @Getter @Setter
-    private Integer count;
+    private Integer count = 0;
 
     @Getter @Setter
     private boolean firstTuple = true;

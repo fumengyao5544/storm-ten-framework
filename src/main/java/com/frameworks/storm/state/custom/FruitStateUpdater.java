@@ -12,21 +12,19 @@ import java.util.List;
  */
 @Slf4j
 public class FruitStateUpdater extends BaseStateUpdater<FruitState> {
-    String tsFieldName;
-    String msgName;
+    String fruitName;
+    String fruitCountName;
 
-    public FruitStateUpdater(String msgName, String tsFieldName){
-        this.tsFieldName = tsFieldName;
-        this.msgName = msgName;
+    public FruitStateUpdater(String fruitName, String fruitCountName){
+        this.fruitName = fruitName;
+        this.fruitCountName = fruitCountName;
     }
 
     public void updateState(FruitState state, List<TridentTuple> tuples, TridentCollector collector) {
-        List<String> Fruits = new ArrayList<String>();
         for(TridentTuple t: tuples) {
-            log.info("TS: "+t.getLongByField(tsFieldName));
-            Fruits.add(t.getStringByField(msgName));
+            state.addFruitsToBasket(t.getStringByField(fruitName),t.getIntegerByField(fruitCountName));
         }
-        for (TridentTuple tuple : tuples) {
+        for (TridentTuple tuple : tuples) { //emit tuples for reuse
             collector.emit(tuple);
         }
     }

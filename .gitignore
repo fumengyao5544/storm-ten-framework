@@ -1,5 +1,6 @@
 src/main/resources
 target/
+pom-org.xml
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
