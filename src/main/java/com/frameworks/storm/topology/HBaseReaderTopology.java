@@ -71,7 +71,7 @@ public class HBaseReaderTopology {
     LocalCluster cluster = new LocalCluster();
 
     Properties props = new Properties();
-    props.put("hbase.zookeeper.quorum", "hw0002.dev1.awse1a.datasciences.tmcs:6667");
+    props.put("hbase.zookeeper.quorum", "your.server.address:6667");
     props.put("zookeeper.znode.parent", "/hbase-unsecure");
     conf.put("hbase.config", props);
 

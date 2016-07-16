@@ -33,7 +33,7 @@ public class KafkaConsumeTopology {
   /*Helper Functions*/
 
   private OpaqueTridentKafkaSpout createKafkaSpout() {
-    BrokerHosts zk = new ZkHosts("hw0002.dev1.awse1a.datasciences.tmcs");
+    BrokerHosts zk = new ZkHosts("your.server.address");
     TridentKafkaConfig spoutConf = new TridentKafkaConfig(zk, "sts.debug.topic");
     spoutConf.scheme = new SchemeAsMultiScheme(new StringScheme());
     OpaqueTridentKafkaSpout spout = new OpaqueTridentKafkaSpout(spoutConf);
@@ -56,7 +56,7 @@ public class KafkaConsumeTopology {
     LocalCluster cluster = new LocalCluster();
 
     Properties props = new Properties();
-    props.put("metadata.broker.list", "hw0002.dev1.awse1a.datasciences.tmcs:6667");
+    props.put("metadata.broker.list", "your.server.address:6667");
     props.put("request.required.acks", "1");
     props.put("serializer.class", "kafka.serializer.StringEncoder");
     props.put("key.serializer.class","kafka.serializer.StringEncoder");
