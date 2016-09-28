@@ -1,0 +1,15 @@
+{"fruitId":"orange1","fruit":"orange","color":"lightorange","weight":11}
+{"fruitId":"orange2","fruit":"orange","color":"darkorange","weight":12}
+{"fruitId":"orange3","fruit":"orange","color":"lightorange","weight":13}
+{"fruitId":"orange4","fruit":"orange","color":"darkorange","weight":14}
+{"fruitId":"orange5","fruit":"orange","color":"orange","weight":15}
+{"fruitId":"apple1","fruit":"apple","color":"lightgreen","weight":1}
+{"fruitId":"apple2","fruit":"apple","color":"darkgreen","weight":2}
+{"fruitId":"apple3","fruit":"apple","color":"lightgreen","weight":3}
+{"fruitId":"apple4","fruit":"apple","color":"darkgreen","weight":4}
+{"fruitId":"apple5","fruit":"apple","color":"green","weight":5}
+{"fruitId":"pomegranate1","fruit":"pomegranate","color":"darkred","weight":6}
+{"fruitId":"pomegranate2","fruit":"pomegranate","color":"lightred","weight":7}
+{"fruitId":"pomegranate3","fruit":"pomegranate","color":"darkred","weight":8}
+{"fruitId":"pomegranate4","fruit":"pomegranate","color":"lightred","weight":9}
+{"fruitId":"pomegranate5","fruit":"pomegranate","color":"red","weight":10}

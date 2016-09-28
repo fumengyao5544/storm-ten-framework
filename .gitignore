@@ -1,4 +1,4 @@
-src/main/resources
+src/main/resources/credentials.yml
 target/
 pom-org.xml
 pom.xml.tag

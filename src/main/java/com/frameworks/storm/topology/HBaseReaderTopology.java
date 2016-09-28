@@ -38,7 +38,7 @@ public class HBaseReaderTopology {
     HBaseStandardValueMapperWithTs tridentHBaseValueMapper = new HBaseStandardValueMapperWithTs();
 
     HBaseProjectionCriteria projectionCriteria = new HBaseProjectionCriteria();
-    projectionCriteria.addColumn(new HBaseProjectionCriteria.ColumnMetaData("cf", "count"));
+    projectionCriteria.addColumn(new HBaseProjectionCriteria.ColumnMetaData("DATA", "count"));
 
     Durability durability = Durability.SYNC_WAL;
 
@@ -48,7 +48,7 @@ public class HBaseReaderTopology {
             .withMapper(tridentHBaseMapper)
             .withProjectionCriteria(projectionCriteria)
             .withRowToStormValueMapper(tridentHBaseValueMapper)
-            .withTableName("sem_campaigns");
+            .withTableName("campaign_data_total");
 
      this.factory = new HBaseStateFactory(options);
   }
@@ -71,7 +71,7 @@ public class HBaseReaderTopology {
     LocalCluster cluster = new LocalCluster();
 
     Properties props = new Properties();
-    props.put("hbase.zookeeper.quorum", "your.server.address:6667");
+    props.put("hbase.zookeeper.quorum", "hw0002.dev1.awse1a.datasciences.tmcs:6667");
     props.put("zookeeper.znode.parent", "/hbase-unsecure");
     conf.put("hbase.config", props);
 

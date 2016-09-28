@@ -32,7 +32,7 @@ import java.util.Properties;
 public class AggregatorTopology {
 
 
-  int batchSize = 15;
+  int batchSize = 5;
   String filePath = "src/main/resources/fruitdata";
 
   private void getTopology()throws Exception{
@@ -41,17 +41,18 @@ public class AggregatorTopology {
 
     Stream aggregatedStream = topology.newStream("spout1", sp.createSpout()) //create aggregated stream
             .each(new Fields("str"),new FruitParser(),new Fields("id","fruit","color","weight"))
-            //.each(new Fields("id","fruit","color","weight"),new Debug(),new Fields());
+            //.each(new Fields("str"),new Debug(),new Fields())
+            //.each(new Fields("id","fruit","color","weight"),new Debug(),new Fields())
             .groupBy(new Fields("fruit"))
-            .aggregate(new Fields("fruit"),new BasicAggregator(),new Fields("fruitName","fruitCount"));
-            //.each(new Fields("fruitName","fruitCount"),new Debug(),new Fields());
+            .aggregate(new Fields("fruit"),new BasicAggregator(),new Fields("fruitName","fruitCount"))
+            .each(new Fields("fruitName","fruitCount"),new Debug(),new Fields());
 
     TridentState FruitState = aggregatedStream //persist the data into the state
             .partitionPersist(new FruitStateFactory(),new Fields("fruitName","fruitCount"),new FruitStateUpdater("fruitName","fruitCount"),new Fields("fruitName"));
 
     Stream queryStream = FruitState.newValuesStream()
-            .stateQuery(FruitState,new Fields("fruitName"),new FruitStateQuery("fruitName"),new Fields("fruitTotals"))
-            .each(new Fields("fruitName","fruitTotals"),new Debug(),new Fields());
+            .stateQuery(FruitState,new Fields("fruitName"),new FruitStateQuery("fruitName"),new Fields("fruitTotals"));
+            //.each(new Fields("fruitName","fruitTotals"),new Debug(),new Fields());
 
     Config conf = new Config();
 

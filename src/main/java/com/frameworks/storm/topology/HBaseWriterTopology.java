@@ -47,7 +47,8 @@ public class HBaseWriterTopology {
     HBaseStandardValueMapperWithTs tridentHBaseValueMapper = new HBaseStandardValueMapperWithTs();
 
     HBaseProjectionCriteria projectionCriteria = new HBaseProjectionCriteria();
-    projectionCriteria.addColumn(new HBaseProjectionCriteria.ColumnMetaData("cf", "count"));
+    //projectionCriteria.addColumn(new HBaseProjectionCriteria.ColumnMetaData("DATA", "value"));
+    projectionCriteria.addColumnFamily("DATA");
 
     Durability durability = Durability.SYNC_WAL;
 
@@ -67,7 +68,7 @@ public class HBaseWriterTopology {
     topology.newStream("spout1", new SpoutProvider().createSpout())
             .each(new Fields(),new HBaseFieldGenerator(),fields)
             .each(new Fields("key"),new Debug(),new Fields())
-            .partitionPersist(factory, fields,  new HBaseUpdater(), new Fields());;
+            .partitionPersist(factory, fields,  new HBaseUpdater(), new Fields());
 
     Stream stream =  topology.newStream("spout1", new SpoutProvider().createSpout());
 
@@ -76,10 +77,11 @@ public class HBaseWriterTopology {
     LocalCluster cluster = new LocalCluster();
 
     Properties props = new Properties();
-    props.put("hbase.zookeeper.quorum", "your.server.address:6667");
+    props.put("hbase.zookeeper.quorum", "hw0002.dev1.awse1a.datasciences.tmcs:6667");
     props.put("zookeeper.znode.parent", "/hbase-unsecure");
     conf.put("hbase.config", props);
 
+    //cluster.submitTopology("kafkaTridentTest", conf, topology.build());
     StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
   }
 
