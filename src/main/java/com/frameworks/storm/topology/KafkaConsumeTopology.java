@@ -3,6 +3,7 @@ package com.frameworks.storm.topology;
 import backtype.storm.LocalCluster;
 import com.frameworks.storm.operation.KafkaFieldGenerator;
 import com.frameworks.storm.providers.SpoutProvider;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.yaml.snakeyaml.Yaml;
 import storm.kafka.BrokerHosts;
@@ -26,10 +27,16 @@ import java.io.InputStream;
 import java.util.Properties;
 
 @Slf4j
+@Setter
 public class KafkaConsumeTopology {
 
-  String nodeAdress;
+  String zkNodeAddress;
+  String brokerNodeAddress;
+  String hbaseNodeAddress;
   String topicName;
+  String tableName;
+  String filePath;
+  int batchSize;
 
   private void persistToHBaseKafka(Stream stream) {
 
@@ -38,8 +45,8 @@ public class KafkaConsumeTopology {
   /*Helper Functions*/
 
   private OpaqueTridentKafkaSpout createKafkaSpout() {
-    BrokerHosts zk = new ZkHosts("hw0002.dev1.awse1a.datasciences.tmcs");
-    TridentKafkaConfig spoutConf = new TridentKafkaConfig(zk, "sts.debug.topic");
+    BrokerHosts zk = new ZkHosts(zkNodeAddress);
+    TridentKafkaConfig spoutConf = new TridentKafkaConfig(zk, topicName);
     spoutConf.scheme = new SchemeAsMultiScheme(new StringScheme());
     OpaqueTridentKafkaSpout spout = new OpaqueTridentKafkaSpout(spoutConf);
     return(spout);
@@ -47,13 +54,12 @@ public class KafkaConsumeTopology {
 
   private void getTopology()throws Exception{
 
-    System.out.println("NODE: "+nodeAdress+topicName);
     TridentTopology topology = new TridentTopology();
     Stream stream = topology.newStream("spout1", createKafkaSpout())
             .each(new Fields("str"),new com.frameworks.storm.debug.Debug(),new Fields());
 
     StateFactory stateFactory = new TridentKafkaStateFactory()
-            .withKafkaTopicSelector(new DefaultTopicSelector("sts.debug.topic"))
+            .withKafkaTopicSelector(new DefaultTopicSelector(topicName))
             .withTridentTupleToKafkaMapper(new FieldNameBasedTupleToKafkaMapper<String, String>("key", "string"));
 
     //stream.partitionPersist(stateFactory, new Fields("key","string"), new TridentKafkaUpdater(), new Fields("key","string"));
@@ -63,7 +69,7 @@ public class KafkaConsumeTopology {
     LocalCluster cluster = new LocalCluster();
 
     Properties props = new Properties();
-    props.put("metadata.broker.list", "hw0002.dev1.awse1a.datasciences.tmcs:6667");
+    props.put("metadata.broker.list", brokerNodeAddress);
     props.put("request.required.acks", "1");
     props.put("serializer.class", "kafka.serializer.StringEncoder");
     props.put("key.serializer.class","kafka.serializer.StringEncoder");

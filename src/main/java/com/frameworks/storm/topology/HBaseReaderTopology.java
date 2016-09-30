@@ -11,6 +11,8 @@ import com.frameworks.storm.providers.SpoutProvider;
 import com.frameworks.storm.state.hbase.PermeableHBaseUpdater;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardMapperWithTs;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardValueMapperWithTs;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.Durability;
 import org.apache.storm.hbase.bolt.mapper.HBaseProjectionCriteria;
@@ -18,19 +20,28 @@ import org.apache.storm.hbase.trident.state.HBaseQuery;
 import org.apache.storm.hbase.trident.state.HBaseState;
 import org.apache.storm.hbase.trident.state.HBaseStateFactory;
 import org.apache.storm.hbase.trident.state.HBaseUpdater;
+import org.yaml.snakeyaml.Yaml;
 import storm.trident.Stream;
 import storm.trident.TridentTopology;
 import storm.trident.state.StateFactory;
 
+import java.io.InputStream;
 import java.util.Properties;
 
 @Slf4j
+@Setter
 public class HBaseReaderTopology {
 
+  String zkNodeAddress;
+  String brokerNodeAddress;
+  String hbaseNodeAddress;
+  String topicName;
+  String nodeAddress;
+  String tableName;
   StateFactory factory;
   private Fields fields= new Fields("key","family","qualifier","value","ts");
-  int batchSize = 15;
-  String filePath = "src/main/resources/fruitdata";
+  int batchSize;
+  String filePath;
 
   private void setOptions(){ //set options for HBASE statefactory
     HBaseStandardMapperWithTs tridentHBaseMapper = new HBaseStandardMapperWithTs("key","family","qualifier","value","ts"); //
@@ -48,7 +59,7 @@ public class HBaseReaderTopology {
             .withMapper(tridentHBaseMapper)
             .withProjectionCriteria(projectionCriteria)
             .withRowToStormValueMapper(tridentHBaseValueMapper)
-            .withTableName("campaign_data_total");
+            .withTableName(tableName);
 
      this.factory = new HBaseStateFactory(options);
   }
@@ -71,18 +82,19 @@ public class HBaseReaderTopology {
     LocalCluster cluster = new LocalCluster();
 
     Properties props = new Properties();
-    props.put("hbase.zookeeper.quorum", "hw0002.dev1.awse1a.datasciences.tmcs:6667");
+    props.put("hbase.zookeeper.quorum", nodeAddress);
     props.put("zookeeper.znode.parent", "/hbase-unsecure");
     conf.put("hbase.config", props);
 
     StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
   }
 
+  @SneakyThrows
   public static void main(String args[]){
 
-    try{new HBaseReaderTopology().getTopology();}
-    catch(Exception e){
-      e.printStackTrace();
-    }
+    Yaml yaml = new Yaml();
+    InputStream in = ClassLoader.getSystemResourceAsStream("credentials.yml");
+    HBaseReaderTopology hbaseTopo= yaml.loadAs(in, HBaseReaderTopology.class);
+    hbaseTopo.getTopology();
   }
 }

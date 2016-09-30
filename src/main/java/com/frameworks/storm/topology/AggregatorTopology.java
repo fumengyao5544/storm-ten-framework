@@ -12,6 +12,7 @@ import com.frameworks.storm.state.custom.FruitState;
 import com.frameworks.storm.state.custom.FruitStateFactory;
 import com.frameworks.storm.state.custom.FruitStateQuery;
 import com.frameworks.storm.state.custom.FruitStateUpdater;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import storm.kafka.BrokerHosts;
 import storm.kafka.StringScheme;
@@ -29,11 +30,11 @@ import storm.trident.TridentTopology;
 import java.util.Properties;
 
 @Slf4j
+@Setter
 public class AggregatorTopology {
 
-
-  int batchSize = 5;
-  String filePath = "src/main/resources/fruitdata";
+  int batchSize;
+  String filePath;
 
   private void getTopology()throws Exception{
     TridentTopology topology = new TridentTopology();
