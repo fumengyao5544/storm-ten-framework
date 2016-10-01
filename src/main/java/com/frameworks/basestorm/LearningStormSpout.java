@@ -19,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class LearningStormSpout extends BaseRichSpout {
+public class LearningStormSpout extends BaseRichSpout { //emits random twitter data
 	private static final long serialVersionUID = 1L;
 	private SpoutOutputCollector spoutOutputCollector;
 

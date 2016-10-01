@@ -6,6 +6,7 @@ import backtype.storm.spout.SchemeAsMultiScheme;
 import backtype.storm.tuple.Fields;
 import com.frameworks.storm.debug.Debug;
 import com.frameworks.storm.operation.HBaseFieldGenerator;
+import com.frameworks.storm.operation.HBaseFruitParser;
 import com.frameworks.storm.operation.KafkaFieldGenerator;
 import com.frameworks.storm.providers.LineProvider;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardMapperWithTs;
@@ -86,7 +87,7 @@ public class HBaseWriterTopo {
     LineProvider lp = new LineProvider(filePath,batchSize); //(path to file,batchsize)
 
     topology.newStream("spout1", lp.createSpout())
-            .each(new Fields(),new HBaseFieldGenerator(),fields)
+            .each(new Fields("str"),new HBaseFruitParser(),fields)
             .each(new Fields("key"),new Debug(),new Fields())
             .partitionPersist(factory, fields,  new HBaseUpdater(), new Fields());
 

@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LearningStormBolt extends BaseBasicBolt {
+public class LearningStormBolt extends BaseBasicBolt { // counts twitter words
 	private static final long serialVersionUID = 1L;
     Map<String, Integer> wordCount = new HashMap<String, Integer>(); // for word count
 

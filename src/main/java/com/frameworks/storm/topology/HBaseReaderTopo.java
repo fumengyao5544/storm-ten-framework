@@ -5,6 +5,7 @@ import backtype.storm.LocalCluster;
 import backtype.storm.tuple.Fields;
 import com.frameworks.storm.debug.Debug;
 import com.frameworks.storm.operation.HBaseFieldGenerator;
+import com.frameworks.storm.operation.HBaseFruitParser;
 import com.frameworks.storm.providers.LineProvider;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardMapperWithTs;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardValueMapperWithTs;
@@ -77,7 +78,7 @@ public class HBaseReaderTopo {
     LineProvider lp = new LineProvider(filePath,batchSize); //(path to file,batchsize)
 
     topology.newStream("spout1", lp.createSpout())
-            .each(new Fields(),new HBaseFieldGenerator(),new Fields("key"))
+            .each(new Fields("str"),new HBaseFruitParser(),new Fields("key"))
             .stateQuery(topology.newStaticState(factory), new Fields("key"), new HBaseQuery(), outputfields)
             .each(outputfields,new Debug(),new Fields()); //queries HBASE for all data;
 
