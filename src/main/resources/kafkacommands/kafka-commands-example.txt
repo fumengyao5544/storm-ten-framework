@@ -1,0 +1,28 @@
+#Make kafka topic
+
+  kafka-topics.sh \
+  --topic my.topic.name \
+  --zookeeper your.server.address \
+  --create --partitions 1 --replication-factor 1 \
+  --config cleanup.policy=compact
+
+
+#List
+	/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper your.server.address:2181
+
+#Push To topic
+cat ~/cgao/testmsg.txt*| kafka-console-producer.sh \
+  --topic my.topic.name \
+  --broker-list your.server.address:6667
+
+#Read from Topic
+/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --topic sample-kafka-topic --zookeeper zk0001.dev2.awse1a.datasciences.tmcs:2181 --from-beginning
+
+#Purge Kafka Que
+kafka-topics.sh --zookeeper your.server.address --alter --topic my.topic.name --config retention.ms=1000
+
+#turn back
+kafka-topics.sh --zookeeper your.server.address --alter --topic my.topic.name --config retention.ms=1000000000
+
+#delete!!!
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --zookeeper your.server.address:2181 --topic basket.topic
