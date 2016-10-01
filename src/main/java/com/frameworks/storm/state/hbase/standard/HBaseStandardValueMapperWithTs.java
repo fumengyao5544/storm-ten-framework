@@ -21,16 +21,15 @@ public class HBaseStandardValueMapperWithTs implements HBaseValueMapper { /*for 
   public List<Values> toValues(ITuple iTuple, Result result) throws Exception { //deserialization
     List<Values> values = new ArrayList<Values>();
 
-    for(Cell cell : result.rawCells()) {
-
+    for (Cell cell : result.rawCells()) {
       String qualifier = Bytes.toString(cell.getQualifierArray(), cell.getQualifierOffset(), cell.getQualifierLength());
-      if(!qualifier.equals("BLOOM")){
-        String key = Bytes.toString(cell.getRowArray(), cell.getRowOffset(), cell.getRowLength());
-        String family = Bytes.toString(cell.getFamilyArray(), cell.getFamilyOffset(), cell.getFamilyLength());
-        long value = Bytes.toLong(cell.getValueArray(), cell.getValueOffset(), cell.getValueLength());
-        long timestamp = cell.getTimestamp();
-        values.add(new Values(key, family, qualifier, value, timestamp));}
+      String key = Bytes.toString(cell.getRowArray(), cell.getRowOffset(), cell.getRowLength());
+      String family = Bytes.toString(cell.getFamilyArray(), cell.getFamilyOffset(), cell.getFamilyLength());
+      String value = Bytes.toString(cell.getValueArray(), cell.getValueOffset(), cell.getValueLength());
+      long timestamp = cell.getTimestamp();
+      values.add(new Values(key, family, qualifier, value, timestamp));
     }
+
     log.info("emit to hbase: {}", values);
     return values;
   }

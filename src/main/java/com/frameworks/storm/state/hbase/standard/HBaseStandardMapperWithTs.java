@@ -33,7 +33,7 @@ public class HBaseStandardMapperWithTs implements TridentHBaseMapper { /*for que
 
         cols.addColumn(toBytes(tuple.getValueByField(columnFamilyField)),
                 toBytes(tuple.getValueByField(qualifierField)),
-                Long.valueOf((String)tuple.getValueByField(timestamp)),
+                (long) tuple.getValueByField(timestamp),
                 toBytes(tuple.getValueByField(valueField)));
 
         return cols;

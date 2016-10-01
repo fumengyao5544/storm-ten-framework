@@ -14,7 +14,7 @@ public class HBaseFieldGenerator extends BaseFunction{
 
         //System.out.println("TEST: "+rowKey);
         //log.info();
-        collector.emit(new Values("key","DATA","qualifier",(long) 123,"value"));
+        collector.emit(new Values("key","DATA","qualifier",(long) 123,"value123"));
 
     }
 }

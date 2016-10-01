@@ -2,7 +2,6 @@ package com.frameworks.storm.topology;
 
 import backtype.storm.LocalCluster;
 import com.frameworks.storm.operation.KafkaFieldGenerator;
-import com.frameworks.storm.providers.SpoutProvider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.yaml.snakeyaml.Yaml;

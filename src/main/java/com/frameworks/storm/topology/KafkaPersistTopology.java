@@ -6,7 +6,6 @@ import backtype.storm.spout.SchemeAsMultiScheme;
 import backtype.storm.tuple.Fields;
 import com.frameworks.storm.operation.KafkaFieldGenerator;
 import com.frameworks.storm.providers.LineProvider;
-import com.frameworks.storm.providers.SpoutProvider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +54,8 @@ public class KafkaPersistTopology {
 
   private void getTopology()throws Exception{
     TridentTopology topology = new TridentTopology();
-    LineProvider lp = new LineProvider(filePath,batchSize);
-    Stream stream = topology.newStream("spout1", lp.createSpout())
+    LineProvider sp = new LineProvider(filePath,batchSize); //(path to file,batchsize)
+    Stream stream = topology.newStream("spout1", sp.createSpout())
             .each(new Fields("str"),new KafkaFieldGenerator(), new Fields("key","string"))
             .each(new Fields("key","string"),new com.frameworks.storm.debug.Debug(),new Fields());
 

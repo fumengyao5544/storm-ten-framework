@@ -2,12 +2,10 @@ package com.frameworks.storm.topology;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
-import backtype.storm.StormSubmitter;
 import backtype.storm.tuple.Fields;
 import com.frameworks.storm.debug.Debug;
 import com.frameworks.storm.operation.HBaseFieldGenerator;
 import com.frameworks.storm.providers.LineProvider;
-import com.frameworks.storm.state.hbase.PermeableHBaseUpdater;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardMapperWithTs;
 import com.frameworks.storm.state.hbase.standard.HBaseStandardValueMapperWithTs;
 import lombok.Setter;
@@ -18,6 +16,7 @@ import org.apache.storm.hbase.bolt.mapper.HBaseProjectionCriteria;
 import org.apache.storm.hbase.trident.state.HBaseQuery;
 import org.apache.storm.hbase.trident.state.HBaseState;
 import org.apache.storm.hbase.trident.state.HBaseStateFactory;
+import org.apache.storm.hbase.trident.state.HBaseUpdater;
 import org.yaml.snakeyaml.Yaml;
 import storm.trident.Stream;
 import storm.trident.TridentTopology;
@@ -28,7 +27,7 @@ import java.util.Properties;
 
 @Slf4j
 @Setter
-public class HBaseReaderTopology {
+public class HBaseReaderTopo {
 
   String zkNodeAddress;
   String brokerNodeAddress;
@@ -40,15 +39,22 @@ public class HBaseReaderTopology {
   String zkQuorum;
   String znodeParent;
 
-  private Fields fields= new Fields("key","family","qualifier","value","ts");
+  private Fields fields= new Fields("key","family","qualifier","ts","value");
+  private Fields outputfields = new Fields("cellRowKey", "cellColumnFamily", "cellQualifier", "cellValue", "cellTimestamp");
 
-  private void setOptions(){ //set options for HBASE statefactory
-    HBaseStandardMapperWithTs tridentHBaseMapper = new HBaseStandardMapperWithTs("key","family","qualifier","value","ts"); //
+
+  private void persistToHBaseKafka(Stream stream) {
+
+  }
+
+  private void setOptions(){
+    HBaseStandardMapperWithTs tridentHBaseMapper = new HBaseStandardMapperWithTs("key","family","qualifier","ts","value");
 
     HBaseStandardValueMapperWithTs tridentHBaseValueMapper = new HBaseStandardValueMapperWithTs();
 
     HBaseProjectionCriteria projectionCriteria = new HBaseProjectionCriteria();
-    projectionCriteria.addColumn(new HBaseProjectionCriteria.ColumnMetaData("DATA", "count"));
+    //projectionCriteria.addColumn(new HBaseProjectionCriteria.ColumnMetaData("DATA", "value"));
+    projectionCriteria.addColumnFamily("DATA");
 
     Durability durability = Durability.SYNC_WAL;
 
@@ -60,31 +66,36 @@ public class HBaseReaderTopology {
             .withRowToStormValueMapper(tridentHBaseValueMapper)
             .withTableName(tableName);
 
-     this.factory = new HBaseStateFactory(options);
+    this.factory = new HBaseStateFactory(options);
   }
 
-  private void getTopology()throws Exception{
-    TridentTopology topology = new TridentTopology();
-    LineProvider sp = new LineProvider(filePath,batchSize); //(path to file,batchsize)
+  /*Helper Functions*/
 
-    topology.newStream("spout1", sp.createSpout())
-            .each(new Fields(),new HBaseFieldGenerator(),fields)
-            .each(new Fields("key"),new Debug(),new Fields())
-            .partitionPersist(factory, fields,  new PermeableHBaseUpdater(), new Fields("key"))
-            .newValuesStream()
-            .stateQuery(topology.newStaticState(factory), new Fields("key"), new HBaseQuery(), new Fields("eventIdKey", "family", "qualifier", "value")); //queries HBASE for all data;
+  private void getTopology()throws Exception{
+    setOptions();
+    TridentTopology topology = new TridentTopology();
+    LineProvider lp = new LineProvider(filePath,batchSize); //(path to file,batchsize)
+
+    topology.newStream("spout1", lp.createSpout())
+            .each(new Fields(),new HBaseFieldGenerator(),new Fields("key"))
+            .stateQuery(topology.newStaticState(factory), new Fields("key"), new HBaseQuery(), outputfields)
+            .each(outputfields,new Debug(),new Fields()); //queries HBASE for all data;
 
     Config conf = new Config();
-
-    LocalCluster cluster = new LocalCluster();
-
     Properties props = new Properties();
     props.put("hbase.zookeeper.quorum", "zk0001.dev2.awse1a.datasciences.tmcs,zk0002.dev2.awse1a.datasciences.tmcs,zk0003.dev2.awse1a.datasciences.tmcs");
     props.put("zookeeper.znode.parent", "/hbase-unsecure");
-    props.put("zookeeper.znode.parent", "/hbase-unsecure");
+    props.put("hbase.zookeeper.property.clientPort",2181);
     conf.put("hbase.config", props);
 
-    StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
+    LocalCluster cluster = new LocalCluster();
+
+    //Local Mode
+    cluster.submitTopology("kafkaTridentTest", conf, topology.build());
+
+    //Submit to Cluster Mode
+    //StormSubmitter.submitTopology("kafkaTridentTest", conf, topology.build());
+
   }
 
   @SneakyThrows
@@ -92,7 +103,7 @@ public class HBaseReaderTopology {
 
     Yaml yaml = new Yaml();
     InputStream in = ClassLoader.getSystemResourceAsStream("credentials.yml");
-    HBaseReaderTopology hbaseTopo= yaml.loadAs(in, HBaseReaderTopology.class);
-    hbaseTopo.getTopology();
+    HBaseReaderTopo kafkaTopo= yaml.loadAs(in, HBaseReaderTopo.class);
+    kafkaTopo.getTopology();
   }
 }

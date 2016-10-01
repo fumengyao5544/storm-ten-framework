@@ -1,4 +1,5 @@
 src/main/resources/credentials.yml
+src/main/resources/hbase-credentials.yml
 src/main/resources/kafkacommands/kafka-commands-example.txt
 target/
 pom-org.xml
