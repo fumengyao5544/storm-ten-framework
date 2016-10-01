@@ -32,11 +32,12 @@ public class KafkaPersistTopology {
 
   String zkNodeAddress;
   String brokerNodeAddress;
-  String hbaseNodeAddress;
   String topicName;
-  String tableName;
   String filePath;
   int batchSize;
+  String tableName;
+  String zkQuorum;
+  String znodeParent;
 
   private void persistToHBaseKafka(Stream stream) {
 
