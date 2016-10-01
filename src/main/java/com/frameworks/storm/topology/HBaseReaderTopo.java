@@ -103,7 +103,7 @@ public class HBaseReaderTopo {
 
     Yaml yaml = new Yaml();
     InputStream in = ClassLoader.getSystemResourceAsStream("credentials.yml");
-    HBaseReaderTopo kafkaTopo= yaml.loadAs(in, HBaseReaderTopo.class);
-    kafkaTopo.getTopology();
+    HBaseReaderTopo hbaseReaderTopo= yaml.loadAs(in, HBaseReaderTopo.class);
+    hbaseReaderTopo.getTopology();
   }
 }

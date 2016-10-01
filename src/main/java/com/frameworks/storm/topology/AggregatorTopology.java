@@ -13,7 +13,9 @@ import com.frameworks.storm.state.custom.FruitStateFactory;
 import com.frameworks.storm.state.custom.FruitStateQuery;
 import com.frameworks.storm.state.custom.FruitStateUpdater;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.yaml.snakeyaml.Yaml;
 import storm.kafka.BrokerHosts;
 import storm.kafka.StringScheme;
 import storm.kafka.ZkHosts;
@@ -26,15 +28,23 @@ import storm.kafka.trident.selector.DefaultTopicSelector;
 import storm.trident.Stream;
 import storm.trident.TridentState;
 import storm.trident.TridentTopology;
+import storm.trident.state.StateFactory;
 
+import java.io.InputStream;
 import java.util.Properties;
 
 @Slf4j
 @Setter
 public class AggregatorTopology {
 
-  int batchSize;
+  String zkNodeAddress;
+  String brokerNodeAddress;
+  String topicName;
   String filePath;
+  int batchSize;
+  String tableName;
+  String zkQuorum;
+  String znodeParent;
 
   private void getTopology()throws Exception{
     TridentTopology topology = new TridentTopology();
@@ -67,12 +77,12 @@ public class AggregatorTopology {
 
   }
 
+  @SneakyThrows
   public static void main(String args[]){
 
-    try{new AggregatorTopology().getTopology();}
-    catch(Exception e){
-      e.printStackTrace();
-
-    }
+    Yaml yaml = new Yaml();
+    InputStream in = ClassLoader.getSystemResourceAsStream("credentials.yml");
+    AggregatorTopology aggrTopo= yaml.loadAs(in, AggregatorTopology.class);
+    aggrTopo.getTopology();
   }
 }

@@ -1,0 +1,26 @@
+#Open Hbase Shell
+
+#List stuff
+list
+
+#Disable
+disable 'table_name'
+
+#Drop
+drop 'table_name'
+
+#Get a row
+get 'table_name', 'key',{COLUMN => 'family_name'}
+
+#Clear Hbase Values
+truncate 'table_name'
+
+#scan table
+scan 'table_name'
+scan 'table_name', {ROWPREFIXFILTER =>"key", VERSIONS => 1000}
+scan 'table_name', {ROWPREFIXFILTER =>"key",COLUMN =>'family_name:qualifier', VERSIONS => 1000}
+
+#delete
+deleteall 'table_name', 'key'
+
+
